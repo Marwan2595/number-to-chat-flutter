@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'home_page.dart';
 
 void main() {
@@ -32,12 +33,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: buildMaterialColor(
-          const Color.fromRGBO(37, 219, 230, 1),
+          const Color.fromRGBO(0, 194, 203, 1),
         ),
-        primaryColor: const Color.fromRGBO(37, 219, 230, 1),
+        primaryColor: const Color.fromRGBO(0, 194, 203, 1),
       ),
       home: HomePage(),
     );

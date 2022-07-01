@@ -80,12 +80,35 @@ class HomePage extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 20)),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Opening Whatsapp ....')),
                       );
-                      openWhatsapp(phone: phoneNumber);
+                      bool opened = await openWhatsapp(phone: phoneNumber);
+                      if (!opened) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Couldn't Open Whatsapp"),
+                            content: const Text(
+                                'Check Internet Connection and Make Sure that Whatsapp is Installed'),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Ok',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Padding(
@@ -110,7 +133,12 @@ class HomePage extends StatelessWidget {
   }
 }
 
-void openWhatsapp({@required String? phone}) async {
-  var url = Uri.parse("whatsapp://send?phone=" + phone.toString());
-  await launchUrl(url);
+Future<bool> openWhatsapp({@required String? phone}) async {
+  try {
+    var url = Uri.parse("whatsapp://send?phone=" + phone.toString());
+    await launchUrl(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
